@@ -1,9 +1,7 @@
-# config.py
 SEEDS = [
     "https://www.bhinneka.com/jual-laptop-notebook/y81WyE6",
-    "https://laptopmedia.com/all-laptop-series/"
     "https://www.tokopedia.com",
-    "https://www.bukalapak.com", 
+    "https://www.bukalapak.com",
     "https://shopee.co.id",
     "https://www.lazada.co.id",
     "https://www.jd.id",
@@ -103,12 +101,13 @@ SEEDS = [
     "https://www.techzim.co.zw"
 ]
 
-# Configuration lainnya
-MAX_URLS = 5
-MAX_CONCURRENT_TASKS = 50
-PER_DOMAIN_DELAY = 1.0
-REQUEST_TIMEOUT = 30
-MAX_RETRIES = 3
+
+
+
+MAX_URLS = 1_000_000
+MAX_CONCURRENT_TASKS = 30
+PER_DOMAIN_DELAY = 1.5
+REQUEST_TIMEOUT = 15
 
 KEYWORD_FILTER = [
     "laptop", "notebook", "tablet", "smartphone", "handphone", "hp", "phone",
