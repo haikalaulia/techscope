@@ -1,10 +1,8 @@
 import { PrismaClient } from "@prisma/client";
 import { configDotenv } from "dotenv";
 
-// Muat environment variables
 configDotenv();
 
-// Inisialisasi Prisma Client dengan proper config untuk Vercel
 const prisma = new PrismaClient({
   datasources: {
     db: {
@@ -28,7 +26,6 @@ export async function connectDB(
   retries = process.env.NODE_ENV === "production" ? 3 : 10,
   delay = process.env.NODE_ENV === "production" ? 2000 : 3000
 ): Promise<void> {
-  // Verifikasi environment variable DATABASE_URL (yang digunakan oleh Prisma)
   if (!process.env.DATABASE_URL) {
     console.error(
       "❌ DATABASE_URL environment variable is not defined. Prisma requires this variable."
