@@ -1,0 +1,46 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+
+model User {
+  id              String          @id @default(uuid())
+  email           String          @unique
+  fullName        String
+  password        String
+  token           String?
+  role            String          @default("user")
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+  otp             String?
+  expOtp          DateTime?
+  isVerify        Boolean         @default(false)
+  photoUrl        String?
+  
+  searchHistories SearchHistory[]
+
+  @@map("User")
+}
+
+model SearchHistory {
+  id              String          @id @default(uuid())
+  userId          String
+  query           String
+  processedQuery  String
+  resultsJson     Json
+  createdAt       DateTime        @default(now())
+  
+  // Relations
+  user            User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  // Indexes untuk performa query
+  @@index([userId])
+  @@index([createdAt])
+  @@map("SearchHistory")
+}

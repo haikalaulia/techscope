@@ -1,145 +1,78 @@
-SEEDS = [
-    "https://www.bhinneka.com/jual-laptop-notebook/y81WyE6",
-    "https://www.tokopedia.com",
-    "https://www.bukalapak.com",
-    "https://shopee.co.id",
-    "https://www.lazada.co.id",
-    "https://www.jd.id",
-    "https://blibli.com",
-    "https://pricebook.co.id",
-    "https://www.teknologi.id",
-    "https://www.gsmarena.com",
-    "https://www.techradar.com",
-    "https://www.tomsguide.com",
-    "https://www.theverge.com",
-    "https://www.cnet.com",
-    "https://www.makeuseof.com",
-    "https://www.androidauthority.com",
-    "https://www.gadgetren.com",
-    "https://gizmologi.id",
-    "https://www.yatekno.com",
-    "https://selular.id",
-    "https://tekno.kompas.com",
-    "https://inet.detik.com",
-    "https://www.liputan6.com/tekno",
-    "https://www.pricebook.co.id/laptop",
-    "https://www.medcom.id/teknologi",
-    "https://www.hitekno.com",
-    "https://www.infokomputer.grid.id",
-    "https://www.gadgetku.id",
-    "https://www.kaskus.co.id",
-    "https://www.beritasatu.com/teknologi",
-    "https://www.antaranews.com/teknologi",
-    "https://www.techspot.com",
-    "https://www.engadget.com",
-    "https://www.notebookcheck.net",
-    "https://www.pcworld.com",
-    "https://www.anandtech.com",
-    "https://www.techpowerup.com",
-    "https://www.techadvisor.com",
-    "https://www.howtogeek.com",
-    "https://www.thewirecutter.com",
-    "https://www.laptopmag.com",
-    "https://www.digitaltrends.com",
-    "https://www.zdnet.com",
-    "https://www.xda-developers.com",
-    "https://www.neowin.net",
-    "https://www.slashgear.com",
-    "https://www.trustedreviews.com",
-    "https://www.tech.co",
-    "https://www.review1st.com",
-    "https://www.tek.id",
-    "https://www.brilio.net/tekno",
-    "https://www.idntimes.com/tech",
-    "https://www.suara.com/tekno",
-    "https://www.jawapos.com/teknologi",
-    "https://www.tribunnews.com/techno",
-    "https://www.cnbcindonesia.com/tech",
-    "https://www.bisnis.com/teknologi",
-    "https://www.kompasiana.com/teknologi",
-    "https://www.techindonews.com",
-    "https://www.teknosaurus.com",
-    "https://www.teknologi.co.id",
-    "https://www.nextren.grid.id",
-    "https://www.dailysocial.id",
-    "https://www.kotakgame.com",
-    "https://www.gamestation.co.id",
-    "https://www.gamedaim.com",
-    "https://www.gamespot.com",
-    "https://www.ign.com",
-    "https://www.gadgetsnow.com",
-    "https://www.merdeka.com/teknologi",
-    "https://www.gridoto.com",
-    "https://www.liputan6.com/tekno",
-    "https://www.tagar.id/teknologi",
-    "https://www.borneonews.co.id/tekno",
-    "https://www.pikiran-rakyat.com/teknologi",
-    "https://www.kapanlagi.com/teknologi",
-    "https://www.republika.co.id/teknologi",
-    "https://www.tempo.co/teknologi",
-    "https://www.tagar.id/teknologi",
-    "https://www.pcgamer.com",
-    "https://www.hardwarezone.com.sg",
-    "https://www.lowyat.net",
-    "https://www.hardware.info",
-    "https://www.overclock3d.net",
-    "https://www.hardwareluxx.de",
-    "https://www.techno.id",
-    "https://www.hardreset.info",
-    "https://www.blibli.com/jual-laptop",
-    "https://www.gadgetplay.id",
-    "https://www.beritateknologi.com",
-    "https://www.duniaelektronik.net",
-    "https://www.hargateknologi.com",
-    "https://www.techdaily.id",
-    "https://www.mobigyaan.com",
-    "https://www.mysmartprice.com",
-    "https://www.smartprix.com",
-    "https://www.91mobiles.com",
-    "https://www.naijatechguide.com",
-    "https://www.techmoran.com",
-    "https://www.techzim.co.zw"
-]
+# config_gsmarena_focus.py
+# Dibuat untuk memprioritaskan crawling pada GSM Arena dan perangkat Handphone/Tablet.
 
+## Konfigurasi Utama
+# Tingkatkan batas URL jika Anda ingin crawling dalam skala besar
+MAX_URLS = 250_000
+MAX_CONCURRENT_TASKS = 50
+PER_DOMAIN_DELAY = 1.0
+REQUEST_TIMEOUT = 20
+MAX_RETRIES = 2
 
-
-
-MAX_URLS = 1_000_000
-MAX_CONCURRENT_TASKS = 30
-PER_DOMAIN_DELAY = 1.5
-REQUEST_TIMEOUT = 15
-
-KEYWORD_FILTER = [
-    "laptop", "notebook", "tablet", "smartphone", "handphone", "hp", "phone",
-    "spesifikasi", "spec", "review", "harga", "price", "beli", "jual",
-    "processor", "ram", "storage", "battery", "display", "layar",
-    "android", "ios", "windows", "macbook", "iphone", "samsung",
-    "xiaomi", "oppo", "vivo", "realme", "asus", "lenovo", "dell", "hp",
-    "gaming", "flagship", "budget", "midrange"
-]
-
+# Filter Domain
+# Hanya izinkan domain yang sangat relevan dengan Handphone/Tablet/Review
 ALLOWED_DOMAINS = [
-    "bhinneka.com", "tokopedia.com", "bukalapak.com", "shopee.co.id", 
-    "lazada.co.id", "jd.id", "blibli.com", "pricebook.co.id", "teknologi.id",
-    "gsmarena.com", "techradar.com", "tomsguide.com", "theverge.com",
-    "cnet.com", "makeuseof.com", "androidauthority.com", "gadgetren.com",
-    "gizmologi.id", "yatekno.com", "selular.id", "kompas.com", "detik.com",
-    "liputan6.com", "medcom.id", "hitekno.com", "grid.id", "gadgetku.id",
-    "kaskus.co.id", "beritasatu.com", "antaranews.com", "techspot.com",
-    "engadget.com", "notebookcheck.net", "pcworld.com", "anandtech.com",
-    "techpowerup.com", "techadvisor.com", "howtogeek.com", "thewirecutter.com",
-    "laptopmag.com", "digitaltrends.com", "zdnet.com", "xda-developers.com",
-    "neowin.net", "slashgear.com", "trustedreviews.com", "tech.co",
-    "review1st.com", "tek.id", "brilio.net", "idntimes.com", "suara.com",
-    "jawapos.com", "tribunnews.com", "cnbcindonesia.com", "bisnis.com",
-    "kompasiana.com", "techindonews.com", "teknosaurus.com", "teknologi.co.id",
-    "nextren.grid.id", "dailysocial.id", "kotakgame.com", "gamestation.co.id",
-    "gamedaim.com", "gamespot.com", "ign.com", "gadgetsnow.com", "merdeka.com",
-    "gridoto.com", "tagar.id", "borneonews.co.id", "pikiran-rakyat.com",
-    "kapanlagi.com", "republika.co.id", "tempo.co", "pcgamer.com",
-    "hardwarezone.com.sg", "lowyat.net", "hardware.info", "overclock3d.net",
-    "hardwareluxx.de", "techno.id", "hardreset.info", "gadgetplay.id",
-    "beritateknologi.com", "duniaelektronik.net", "hargateknologi.com",
-    "techdaily.id", "mobigyaan.com", "mysmartprice.com", "smartprix.com",
-    "91mobiles.com", "naijatechguide.com", "techmoran.com", "techzim.co.zw"
+    # Prioritas Utama (GSM Arena & Kompetitor Utama)
+    "gsmarena.com", 
+    "phonearena.com", 
+    
+    # Reviewer Handphone/Tablet
+    "androidauthority.com", "cnet.com", "theverge.com", "pcmag.com",
+    "trustedreviews.com", "tomsguide.com", "techradar.com", 
+    
+    # Produsen Utama (Smartphone/Tablet)
+    "apple.com", "samsung.com", "xiaomi.com", "oppo.com", "vivo.com",
+    "realme.com", "oneplus.com", "google.com", 
+    
+    # Forum Utama
+    "forum.xda-developers.com", "reddit.com", "kaskus.co.id",
+    
+    # Berita Teknologi Umum Indonesia (dengan filter keyword yang kuat)
+    "tekno.kompas.com", "inet.detik.com", "dailysocial.id",
+]
+
+## Seed URLs (Hanya URL Awal)
+# Fokuskan SEEDS pada kategori Handphone dan Tablet, terutama GSM Arena.
+SEEDS = [
+    # PRIORITAS TERTINGGI: GSM Arena (Home & Kategori HP)
+    "https://www.gsmarena.com/",
+    "https://www.gsmarena.com/res.php3", # Review (res)
+    "https://www.gsmarena.com/makers.php3", # Manufacturers (makers)
+    "https://www.gsmarena.com/sitemap.php", # Sitemap
+    "https://www.gsmarena.com/glossary.php3", # Glossary (untuk spesifikasi)
+    
+    # Kategori Smartphone dan Tablet Lainnya
+    "https://www.phonearena.com/",
+    "https://www.apple.com/iphone/",
+    "https://www.apple.com/ipad/",
+    "https://www.samsung.com/id/smartphones/",
+    "https://www.samsung.com/id/tablets/",
+    "https://www.xiaomi.com/id/",
+    "https://www.oppo.com/id/",
+    "https://www.vivo.com/id/",
+    "https://www.realme.com/id/",
+    
+    # URL Review/Berita Smartphone/Tablet Global
+    "https://www.techradar.com/news/phone-and-communications/mobile-phones",
+    "https://www.tomsguide.com/topic/smartphones",
+    "https://www.cnet.com/reviews/phones/",
+    "https://www.theverge.com/phones",
+]
+
+## Filter Kata Kunci
+# Fokuskan filter pada spesifikasi dan nama produk Handphone/Tablet.
+KEYWORD_FILTER = [
+    # Perangkat
+    "smartphone", "handphone", "hp", "phone", "mobile", "cellphone", "tablet", "ipad", "galaxy tab",
+    "surface pro", "xiaomi pad", "tab",
+    
+    # Brand/Model Utama
+    "samsung galaxy", "iphone", "xiaomi", "oppo", "vivo", "realme", "oneplus",
+    "snapdragon", "mediatek", "exynos", "apple a series", "processor", "chipset",
+    
+    # Spesifikasi
+    "ram", "storage", "internal memory", "camera", "megapixel", "display", 
+    "screen", "amoled", "oled", "ips lcd", "refresh rate", "battery", 
+    "fast charging", "wireless charging", "5g", "4g", "fingerprint", 
+    "spesifikasi", "spec", "specification", "review", "ulasan", "harga"
 ]
