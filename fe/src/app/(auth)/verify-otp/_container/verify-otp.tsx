@@ -4,10 +4,11 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 
 import Container from "@/components/ui/container";
+import BackgroundMemo from "@/core/components/background-memo";
 import OTPForm from "@/core/section/auth/verify-otp/hero-section";
 import { useAppSelector } from "@/hooks/dispatch/dispatch";
-import { useAppNameSpase } from "@/hooks/useAppNameSpace";
 import useServices from "@/hooks/mutation/props.mutation";
+import { useAppNameSpase } from "@/hooks/useAppNameSpace";
 import { FormVerifyOtp } from "@/types/form/auth.form";
 
 const VerifyOtpContainer = () => {
@@ -94,6 +95,9 @@ const VerifyOtpContainer = () => {
 
   return (
     <Container className=" flex min-h-svh flex-col items-center justify-center gap-6 p-6 md:p-10">
+      <div className="absolute w-full h-full z-[-1]">
+        <BackgroundMemo />
+      </div>
       <div className="flex w-full max-w-sm flex-col gap-6">
         <Link
           href="#"

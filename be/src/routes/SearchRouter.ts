@@ -14,7 +14,7 @@ class SearchRouter {
     /**
      * POST /api/search
      * Hybrid search endpoint - accessible both authenticated & unauthenticated
-     * Authenticated users: search results are saved to history
+     * Authenticated users: search results are saved to history as type "hybrid"
      * Unauthenticated users: search results are NOT saved
      *
      * Body: { query: string }
@@ -34,42 +34,46 @@ class SearchRouter {
     );
 
     /**
-     * GET /api/search/history/:userId
-     * Get search history for authenticated user
-     * Only the user can view their own search history
-     *
-     * Params: userId
-     * Query: ?limit=20&offset=0
-     * Headers: Authorization: Bearer <token> (required)
-     * Returns: { success, data, pagination, message }
-     */
-    this.router.get(
-      "/history/:userId",
-      verifyToken,
-      searchController.getSearchHistory.bind(searchController)
-    );
-
-    /**
      * POST /api/predict
-     * TF-IDF vector space model search endpoint - accessible to all users
+     * Vector space (TF-IDF) search endpoint
+     * Authenticated users: search results are saved to history as type "vector"
+     * Unauthenticated users: search results are NOT saved
      *
      * Body: { query: string }
-     * Returns: { success, data, message }
+     * Headers: Authorization: Bearer <token> (optional)
+     * Returns: { success, data, historyId?, message }
      */
     this.router.post(
       "/predict",
+      (req, res, next) => {
+        if (req.headers.authorization) {
+          verifyToken(req, res, next);
+        } else {
+          next();
+        }
+      },
       searchController.performVectorSpaceSearch.bind(searchController)
     );
 
     /**
      * POST /api/predict/jaccard
-     * Jaccard similarity search endpoint - accessible to all users
+     * Jaccard similarity search endpoint
+     * Authenticated users: search results are saved to history as type "jaccard"
+     * Unauthenticated users: search results are NOT saved
      *
      * Body: { query: string }
-     * Returns: { success, data, message }
+     * Headers: Authorization: Bearer <token> (optional)
+     * Returns: { success, data, historyId?, message }
      */
     this.router.post(
       "/predict/jaccard",
+      (req, res, next) => {
+        if (req.headers.authorization) {
+          verifyToken(req, res, next);
+        } else {
+          next();
+        }
+      },
       searchController.performJaccardSearch.bind(searchController)
     );
 

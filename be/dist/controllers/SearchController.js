@@ -24,10 +24,11 @@ class SearchController {
                 });
                 return;
             }
-            const result = await SearchGatewayService_1.default.performHybridSearch({
+            const result = await SearchGatewayService_1.default.performSearch({
                 userId,
                 query: query.trim(),
                 isAuthenticated,
+                type: "hybrid",
             });
             if (result.success) {
                 res.status(200).json({
@@ -57,40 +58,16 @@ class SearchController {
         }
     }
     /**
-     * GET /api/search/history/:userId
-     * Mendapatkan search history pengguna (hanya untuk authenticated users)
-     */
-    async getSearchHistory(req, res) {
-        try {
-            const { userId } = req.params;
-            const { limit = 20, offset = 0 } = req.query;
-            // Check authorization
-            if (req.user?.id !== userId) {
-                res.status(403).json({
-                    success: false,
-                    message: "Unauthorized to view this user's history",
-                });
-                return;
-            }
-            const result = await SearchGatewayService_1.default.getUserSearchHistory(userId, Number(limit), Number(offset));
-            res.status(200).json(result);
-        }
-        catch (error) {
-            console.error("Error fetching search history:", error);
-            res.status(500).json({
-                success: false,
-                message: "Failed to fetch search history",
-                error: error instanceof Error ? error.message : "Unknown error",
-            });
-        }
-    }
-    /**
      * POST /api/predict/jaccard
      * Endpoint untuk Jaccard similarity search
+     * Jika user authenticated: simpan ke history sebagai type "jaccard"
+     * Jika user guest: jangan simpan
      */
     async performJaccardSearch(req, res) {
         try {
             const { query } = req.body;
+            const userId = req.user?.id;
+            const isAuthenticated = !!req.user;
             // Validasi query
             if (!query || typeof query !== "string" || query.trim().length === 0) {
                 res.status(400).json({
@@ -99,11 +76,17 @@ class SearchController {
                 });
                 return;
             }
-            const result = await SearchGatewayService_1.default.performJaccardSearch(query.trim());
+            const result = await SearchGatewayService_1.default.performSearch({
+                userId,
+                query: query.trim(),
+                isAuthenticated,
+                type: "jaccard",
+            });
             if (result.success) {
                 res.status(200).json({
                     success: true,
                     data: result.data,
+                    historyId: result.historyId,
                     message: result.message,
                 });
             }
@@ -127,10 +110,14 @@ class SearchController {
     /**
      * POST /api/predict
      * Endpoint untuk TF-IDF vector space model search
+     * Jika user authenticated: simpan ke history sebagai type "vector"
+     * Jika user guest: jangan simpan
      */
     async performVectorSpaceSearch(req, res) {
         try {
             const { query } = req.body;
+            const userId = req.user?.id;
+            const isAuthenticated = !!req.user;
             // Validasi query
             if (!query || typeof query !== "string" || query.trim().length === 0) {
                 res.status(400).json({
@@ -139,11 +126,17 @@ class SearchController {
                 });
                 return;
             }
-            const result = await SearchGatewayService_1.default.performVectorSpaceSearch(query.trim());
+            const result = await SearchGatewayService_1.default.performSearch({
+                userId,
+                query: query.trim(),
+                isAuthenticated,
+                type: "vector",
+            });
             if (result.success) {
                 res.status(200).json({
                     success: true,
                     data: result.data,
+                    historyId: result.historyId,
                     message: result.message,
                 });
             }
@@ -210,6 +203,46 @@ class SearchController {
         }
         catch (error) {
             console.error("Model evaluation error:", error);
+            res.status(500).json({
+                success: false,
+                message: "Internal server error",
+                error: error instanceof Error ? error.message : "Unknown error",
+            });
+        }
+    }
+    /**
+     * GET /api/products/:id
+     * Mendapatkan detail lengkap produk berdasarkan ID
+     * Accessible untuk semua user (authenticated & unauthenticated)
+     */
+    async getProductDetail(req, res) {
+        try {
+            const { id } = req.params;
+            // Validasi ID
+            if (!id || isNaN(Number(id))) {
+                res.status(400).json({
+                    success: false,
+                    message: "Invalid product ID",
+                });
+                return;
+            }
+            const result = await SearchGatewayService_1.default.getProductDetail(Number(id));
+            if (result.success) {
+                res.status(200).json({
+                    success: true,
+                    data: result.data,
+                });
+            }
+            else {
+                res.status(404).json({
+                    success: false,
+                    message: result.message,
+                    error: result.error,
+                });
+            }
+        }
+        catch (error) {
+            console.error("Error fetching product detail:", error);
             res.status(500).json({
                 success: false,
                 message: "Internal server error",

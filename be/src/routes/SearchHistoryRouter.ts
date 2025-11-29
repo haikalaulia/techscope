@@ -23,8 +23,47 @@ class SearchHistoryRouter {
     );
 
     /**
+     * GET /api/search-history/:userId/hybrid
+     * Mengambil riwayat hybrid search pengguna (hanya untuk authenticated users)
+     * Query params: ?limit=20&offset=0
+     */
+    this.router.get(
+      "/:userId/hybrid",
+      verifyToken,
+      searchHistoryController.getHybridSearchHistory.bind(
+        searchHistoryController
+      )
+    );
+
+    /**
+     * GET /api/search-history/:userId/jaccard
+     * Mengambil riwayat jaccard search pengguna (hanya untuk authenticated users)
+     * Query params: ?limit=20&offset=0
+     */
+    this.router.get(
+      "/:userId/jaccard",
+      verifyToken,
+      searchHistoryController.getJaccardSearchHistory.bind(
+        searchHistoryController
+      )
+    );
+
+    /**
+     * GET /api/search-history/:userId/vector
+     * Mengambil riwayat vector (TF-IDF) search pengguna (hanya untuk authenticated users)
+     * Query params: ?limit=20&offset=0
+     */
+    this.router.get(
+      "/:userId/vector",
+      verifyToken,
+      searchHistoryController.getVectorSearchHistory.bind(
+        searchHistoryController
+      )
+    );
+
+    /**
      * GET /api/search-history/:userId
-     * Mengambil riwayat pencarian pengguna (hanya untuk authenticated users)
+     * Mengambil semua riwayat pencarian pengguna (hanya untuk authenticated users)
      * Query params: ?limit=20&offset=0
      */
     this.router.get(

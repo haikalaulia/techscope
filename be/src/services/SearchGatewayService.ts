@@ -15,6 +15,7 @@ interface GatewaySearchRequest {
   userId?: string;
   query: string;
   isAuthenticated: boolean;
+  type?: "hybrid" | "jaccard" | "vector"; // default: hybrid
 }
 
 interface GatewaySearchResponse {
@@ -34,11 +35,6 @@ class SearchGatewayService {
       timeout: 30000,
     });
   }
-
-  /**
-   * Helper: Clean NaN values dari response Flask
-   * NaN dari pandas DataFrame tidak valid dalam JSON
-   */
   private cleanNaNValues(obj: any): any {
     if (obj === null || obj === undefined) {
       return null;
@@ -89,29 +85,50 @@ class SearchGatewayService {
   }
 
   /**
-   * Melakukan hybrid search dan conditional logging ke database
-   * @param request Request dari user (termasuk userId jika authenticated)
+   * Unified search method yang support multiple search types
+   * @param request Request dari user dengan type parameter
    * @returns Response dengan hasil pencarian dan history ID jika disimpan
    */
-  async performHybridSearch(
+  async performSearch(
     request: GatewaySearchRequest
   ): Promise<GatewaySearchResponse> {
+    const searchType = request.type || "hybrid";
+
     try {
-      // 1. Call Flask API untuk melakukan hybrid search
-      // Note: Flask endpoint adalah /search (bukan /api/search)
-      const flaskResponse = await this.flaskClient.post<FlaskSearchResult>(
-        "/search",
-        {
-          query: request.query,
-        }
+      let flaskEndpoint: string;
+      let flaskPayload: any;
+
+      // Determine Flask endpoint berdasarkan search type
+      switch (searchType) {
+        case "jaccard":
+          flaskEndpoint = "/predict_jaccard";
+          flaskPayload = { query: request.query };
+          break;
+        case "vector":
+          flaskEndpoint = "/predict";
+          flaskPayload = { query: request.query };
+          break;
+        case "hybrid":
+        default:
+          flaskEndpoint = "/search";
+          flaskPayload = { query: request.query };
+      }
+
+      // Call Flask API
+      const flaskResponse = await this.flaskClient.post<any>(
+        flaskEndpoint,
+        flaskPayload
       );
 
-      const searchResult = flaskResponse.data;
+      let searchResult = flaskResponse.data;
+      if (typeof flaskResponse.data === "string") {
+        searchResult = this.safeJSONParse(flaskResponse.data);
+      }
 
-      // Clean NaN values dari Flask response
+      // Clean NaN values
       const cleanedResult = this.cleanNaNValues(searchResult);
 
-      // 2. Jika user authenticated, simpan ke search history
+      // Save to history jika authenticated
       let historyId: string | undefined;
       if (request.isAuthenticated && request.userId) {
         const history = await prisma.searchHistory.create({
@@ -119,7 +136,10 @@ class SearchGatewayService {
             userId: request.userId,
             query: request.query,
             processedQuery: cleanedResult.processedQuery || request.query,
-            resultsJson: cleanedResult as any,
+            resultsJson: {
+              type: searchType,
+              ...cleanedResult,
+            } as any,
           },
         });
         historyId = history.id;
@@ -129,15 +149,15 @@ class SearchGatewayService {
         success: true,
         data: cleanedResult,
         historyId,
-        message: "Search completed successfully",
+        message: `${searchType} search completed successfully`,
       };
     } catch (error) {
-      console.error("Search Gateway Error:", error);
+      console.error(`${searchType} Search Error:`, error);
 
       if (axios.isAxiosError(error)) {
         return {
           success: false,
-          message: "Error connecting to search service",
+          message: `Error connecting to ${searchType} search service`,
           error: error.message,
         };
       }
@@ -148,6 +168,18 @@ class SearchGatewayService {
         error: error instanceof Error ? error.message : "Unknown error",
       };
     }
+  }
+
+  /**
+   * Legacy: Melakukan hybrid search dan conditional logging ke database
+   * @param request Request dari user (termasuk userId jika authenticated)
+   * @returns Response dengan hasil pencarian dan history ID jika disimpan
+   * @deprecated Use performSearch with type="hybrid" instead
+   */
+  async performHybridSearch(
+    request: GatewaySearchRequest
+  ): Promise<GatewaySearchResponse> {
+    return this.performSearch(request);
   }
 
   /**
@@ -212,45 +244,14 @@ class SearchGatewayService {
    * Predict Jaccard - Endpoint untuk Jaccard similarity search
    * @param query Query string dari user
    * @returns Hasil Jaccard similarity dengan top 10 produk
+   * @deprecated Use performSearch with type="jaccard" instead
    */
   async performJaccardSearch(query: string): Promise<GatewaySearchResponse> {
-    try {
-      const flaskResponse = await this.flaskClient.post<any>(
-        "/predict_jaccard",
-        { query }
-      );
-
-      // Parse data jika berupa string JSON
-      let parsedData = flaskResponse.data;
-      if (typeof flaskResponse.data === "string") {
-        parsedData = this.safeJSONParse(flaskResponse.data);
-      }
-
-      // Clean NaN values
-      parsedData = this.cleanNaNValues(parsedData);
-
-      return {
-        success: true,
-        data: parsedData,
-        message: "Jaccard search completed successfully",
-      };
-    } catch (error) {
-      console.error("Jaccard Search Error:", error);
-
-      if (axios.isAxiosError(error)) {
-        return {
-          success: false,
-          message: "Error connecting to Jaccard search service",
-          error: error.message,
-        };
-      }
-
-      return {
-        success: false,
-        message: "An unexpected error occurred",
-        error: error instanceof Error ? error.message : "Unknown error",
-      };
-    }
+    return this.performSearch({
+      query,
+      isAuthenticated: false,
+      type: "jaccard",
+    });
   }
 
   /**
@@ -306,46 +307,16 @@ class SearchGatewayService {
    * Predict Vector Space - Endpoint untuk TF-IDF vector space model
    * @param query Query string dari user
    * @returns Hasil search menggunakan TF-IDF
+   * @deprecated Use performSearch with type="vector" instead
    */
   async performVectorSpaceSearch(
     query: string
   ): Promise<GatewaySearchResponse> {
-    try {
-      const flaskResponse = await this.flaskClient.post<any>("/predict", {
-        query,
-      });
-
-      // Parse data jika berupa string JSON
-      let parsedData = flaskResponse.data;
-      if (typeof flaskResponse.data === "string") {
-        parsedData = this.safeJSONParse(flaskResponse.data);
-      }
-
-      // Clean NaN values
-      parsedData = this.cleanNaNValues(parsedData);
-
-      return {
-        success: true,
-        data: parsedData,
-        message: "Vector space search completed successfully",
-      };
-    } catch (error) {
-      console.error("Vector Space Search Error:", error);
-
-      if (axios.isAxiosError(error)) {
-        return {
-          success: false,
-          message: "Error connecting to vector space search service",
-          error: error.message,
-        };
-      }
-
-      return {
-        success: false,
-        message: "An unexpected error occurred",
-        error: error instanceof Error ? error.message : "Unknown error",
-      };
-    }
+    return this.performSearch({
+      query,
+      isAuthenticated: false,
+      type: "vector",
+    });
   }
 }
 

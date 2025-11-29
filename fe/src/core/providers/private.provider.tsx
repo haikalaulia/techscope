@@ -1,4 +1,5 @@
 import { redirect } from "next/navigation";
+
 import { authValidator } from "@/services/auth/auth.store";
 
 export default async function PrivateProviders({

@@ -109,6 +109,222 @@ class SearchHistoryController {
         }
     }
     /**
+     * GET /api/search/history/:userId/hybrid
+     * Mendapatkan riwayat pencarian hybrid search pengguna
+     */
+    async getHybridSearchHistory(req, res) {
+        try {
+            const { userId } = req.params;
+            const { limit = 20, offset = 0 } = req.query;
+            // Validasi userId
+            if (!userId) {
+                res.status(400).json({
+                    success: false,
+                    message: "User ID is required",
+                });
+                return;
+            }
+            // Verifikasi user ada
+            const user = await prisma_1.prisma.user.findUnique({
+                where: { id: userId },
+            });
+            if (!user) {
+                res.status(404).json({
+                    success: false,
+                    message: "User not found",
+                });
+                return;
+            }
+            // Ambil search history dengan filtering type "hybrid"
+            const [searchHistories, totalCount] = await Promise.all([
+                prisma_1.prisma.searchHistory.findMany({
+                    where: {
+                        userId,
+                        resultsJson: {
+                            path: ["type"],
+                            equals: "hybrid",
+                        },
+                    },
+                    orderBy: { createdAt: "desc" },
+                    take: Number(limit),
+                    skip: Number(offset),
+                }),
+                prisma_1.prisma.searchHistory.count({
+                    where: {
+                        userId,
+                        resultsJson: {
+                            path: ["type"],
+                            equals: "hybrid",
+                        },
+                    },
+                }),
+            ]);
+            res.status(200).json({
+                success: true,
+                message: "Hybrid search history retrieved successfully",
+                data: searchHistories,
+                pagination: {
+                    total: totalCount,
+                    limit: Number(limit),
+                    offset: Number(offset),
+                    hasMore: Number(offset) + Number(limit) < totalCount,
+                },
+            });
+        }
+        catch (error) {
+            console.error("Error retrieving hybrid search history:", error);
+            res.status(500).json({
+                success: false,
+                message: "Internal server error",
+                error: error instanceof Error ? error.message : "Unknown error",
+            });
+        }
+    }
+    /**
+     * GET /api/search/history/:userId/jaccard
+     * Mendapatkan riwayat pencarian jaccard search pengguna
+     */
+    async getJaccardSearchHistory(req, res) {
+        try {
+            const { userId } = req.params;
+            const { limit = 20, offset = 0 } = req.query;
+            // Validasi userId
+            if (!userId) {
+                res.status(400).json({
+                    success: false,
+                    message: "User ID is required",
+                });
+                return;
+            }
+            // Verifikasi user ada
+            const user = await prisma_1.prisma.user.findUnique({
+                where: { id: userId },
+            });
+            if (!user) {
+                res.status(404).json({
+                    success: false,
+                    message: "User not found",
+                });
+                return;
+            }
+            // Ambil search history dengan filtering type "jaccard"
+            const [searchHistories, totalCount] = await Promise.all([
+                prisma_1.prisma.searchHistory.findMany({
+                    where: {
+                        userId,
+                        resultsJson: {
+                            path: ["type"],
+                            equals: "jaccard",
+                        },
+                    },
+                    orderBy: { createdAt: "desc" },
+                    take: Number(limit),
+                    skip: Number(offset),
+                }),
+                prisma_1.prisma.searchHistory.count({
+                    where: {
+                        userId,
+                        resultsJson: {
+                            path: ["type"],
+                            equals: "jaccard",
+                        },
+                    },
+                }),
+            ]);
+            res.status(200).json({
+                success: true,
+                message: "Jaccard search history retrieved successfully",
+                data: searchHistories,
+                pagination: {
+                    total: totalCount,
+                    limit: Number(limit),
+                    offset: Number(offset),
+                    hasMore: Number(offset) + Number(limit) < totalCount,
+                },
+            });
+        }
+        catch (error) {
+            console.error("Error retrieving jaccard search history:", error);
+            res.status(500).json({
+                success: false,
+                message: "Internal server error",
+                error: error instanceof Error ? error.message : "Unknown error",
+            });
+        }
+    }
+    /**
+     * GET /api/search/history/:userId/vector
+     * Mendapatkan riwayat pencarian vector (TF-IDF) search pengguna
+     */
+    async getVectorSearchHistory(req, res) {
+        try {
+            const { userId } = req.params;
+            const { limit = 20, offset = 0 } = req.query;
+            // Validasi userId
+            if (!userId) {
+                res.status(400).json({
+                    success: false,
+                    message: "User ID is required",
+                });
+                return;
+            }
+            // Verifikasi user ada
+            const user = await prisma_1.prisma.user.findUnique({
+                where: { id: userId },
+            });
+            if (!user) {
+                res.status(404).json({
+                    success: false,
+                    message: "User not found",
+                });
+                return;
+            }
+            // Ambil search history dengan filtering type "vector"
+            const [searchHistories, totalCount] = await Promise.all([
+                prisma_1.prisma.searchHistory.findMany({
+                    where: {
+                        userId,
+                        resultsJson: {
+                            path: ["type"],
+                            equals: "vector",
+                        },
+                    },
+                    orderBy: { createdAt: "desc" },
+                    take: Number(limit),
+                    skip: Number(offset),
+                }),
+                prisma_1.prisma.searchHistory.count({
+                    where: {
+                        userId,
+                        resultsJson: {
+                            path: ["type"],
+                            equals: "vector",
+                        },
+                    },
+                }),
+            ]);
+            res.status(200).json({
+                success: true,
+                message: "Vector search history retrieved successfully",
+                data: searchHistories,
+                pagination: {
+                    total: totalCount,
+                    limit: Number(limit),
+                    offset: Number(offset),
+                    hasMore: Number(offset) + Number(limit) < totalCount,
+                },
+            });
+        }
+        catch (error) {
+            console.error("Error retrieving vector search history:", error);
+            res.status(500).json({
+                success: false,
+                message: "Internal server error",
+                error: error instanceof Error ? error.message : "Unknown error",
+            });
+        }
+    }
+    /**
      * Menghapus satu search history
      */
     async deleteSearchHistory(req, res) {

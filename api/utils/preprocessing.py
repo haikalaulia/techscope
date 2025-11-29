@@ -12,7 +12,6 @@ def jaccard_similarity(tokens1, tokens2):
     union = len(set1.union(set2))
     return intersection / union if union != 0 else 0
 
-# --- FUNGSI EKSTRAKSI KUERI YANG SUDAH DIPERBAIKI ---
 def process_query_hybrid(query):
     """
     Ekstraksi kategori, harga, dan stemming kueri. 

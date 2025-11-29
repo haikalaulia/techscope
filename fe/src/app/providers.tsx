@@ -7,13 +7,13 @@ import { PersistGate } from "redux-persist/integration/react";
 
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { AuthProvider } from "@/core/providers/auth.provider";
+import { LanguageProvider } from "@/core/providers/languageProvider";
 import { ThemeProvider } from "@/core/providers/theme.provider";
 import { AlertProvinder } from "@/hooks/useAlert/costum-alert";
 import { ReactQueryClientProvider } from "@/pkg/react-query/query-client.pkg";
 import { persistor, store } from "@/stores/store";
 
 import { composeProviders } from "./composeProvinders";
-import { LanguageProvider } from "@/core/providers/languageProvider";
 
 const Providers = composeProviders([
   ({ children }) => (

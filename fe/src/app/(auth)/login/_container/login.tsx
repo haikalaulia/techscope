@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useState } from "react";
 
 import Container from "@/components/ui/container";
+import BackgroundMemo from "@/core/components/background-memo";
 import LoginForm from "@/core/section/auth/login/hero-section";
 import useServices from "@/hooks/mutation/props.mutation";
 import { useAppNameSpase } from "@/hooks/useAppNameSpace";
@@ -38,6 +39,9 @@ const LoginContainer = () => {
 
   return (
     <Container className="flex min-h-svh items-center justify-center p-6 md:p-10">
+      <div className="absolute w-full h-full z-[-1]">
+        <BackgroundMemo />
+      </div>
       <div className="w-full max-w-sm">
         <div className="flex w-full max-w-sm flex-col gap-6">
           <Link

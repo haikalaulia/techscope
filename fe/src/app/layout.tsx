@@ -1,11 +1,15 @@
-import '@/styles/globals.css';
+import "@/styles/globals.css";
 
-import { metadata, siteConfig } from './metadata';
-import { AppProviders } from './providers';
+import { metadata, siteConfig } from "./metadata";
+import { AppProviders } from "./providers";
 
 export { metadata };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
     <html lang={siteConfig.locale} suppressHydrationWarning>
       <body>

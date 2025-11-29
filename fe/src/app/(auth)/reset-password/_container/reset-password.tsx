@@ -1,3 +1,4 @@
+"use client";
 import Container from "@/components/ui/container";
 import ResetPasswordSection from "@/core/section/auth/reset-password/hero-secton";
 

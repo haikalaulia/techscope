@@ -14,11 +14,6 @@ def home():
 
 @app.route("/predict", methods=["POST"])
 def predict_tfidf():
-    """
-    Endpoint prediksi menggunakan TF-IDF Cosine Similarity murni.
-    Menggunakan prosesor kueri yang sudah diperbaiki (process_query_hybrid) 
-    untuk menghasilkan kueri yang bersih dan siap di-ranking.
-    """
     try:
         data = request.get_json()
         query = data.get("query")
@@ -26,44 +21,52 @@ def predict_tfidf():
         if not query:
             return jsonify({"error": "Query is required"}), 400
 
-        # --- PERBAIKAN: Menggunakan pipeline kueri yang sudah diperbaiki ---
-        # category, price_target, ranked_query_stem, query_tokens
-        _, _, processed_query, _ = process_query_hybrid(query)
-        # ----------------------------------------------------
+        # Ambil semua hasil dari processing
+        category_filter, price_target, processed_query, processed_tokens = process_query_hybrid(query)
 
         if not processed_query:
             return jsonify({
                 "query": query,
+                "category_filter": category_filter,
+                "price_target": price_target,
                 "processed": processed_query,
                 "results": [],
-                "note": "Kueri hanya mengandung kata fungsional/stopword setelah diproses."
+                "note": "Kueri hanya berisi stopword."
             })
 
+        if category_filter:
+            mask = df["device_type"].str.lower() == category_filter.lower()
+            df_filtered = df[mask].reset_index(drop=True)
 
-        # Transformasi kueri ke vektor TF-IDF
+            # Filter TF-IDF matrix juga (baris sesuai mask)
+            tfidf_filtered = tfidf_matrix[df[mask].index]
+        else:
+            df_filtered = df
+            tfidf_filtered = tfidf_matrix
+
         query_vec = vectorizer.transform([processed_query])
+        similarities = cosine_similarity(query_vec, tfidf_filtered).flatten()
 
-        # Hitung Cosine Similarity
-        similarities = cosine_similarity(query_vec, tfidf_matrix).flatten()
-
-        # Ambil 10 hasil teratas
+        # Ambil top 10
         top_idx = similarities.argsort()[::-1][:10]
 
         results = []
         for i in top_idx:
-            row = df.iloc[i].to_dict()
+            row = df_filtered.iloc[i].to_dict()
             row["similarity"] = float(similarities[i])
             results.append(row)
 
         return jsonify({
             "query": query,
+            "category_filter": category_filter,
+            "price_target": price_target,
             "processed": processed_query,
+            "processed_tokens": processed_tokens,
             "results": results
         })
 
     except Exception as e:
         return jsonify({"error": str(e)}), 500
-
 
 @app.route("/evaluate", methods=["POST"])
 def evaluate():

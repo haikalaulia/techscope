@@ -1,7 +1,6 @@
 import { Request, Response } from "express";
 import searchGatewayService from "../services/SearchGatewayService";
 import { JwtPayload } from "../types/auth.types";
-import { Prisma } from "@prisma/client";
 
 // Extend Express Request untuk menyimpan user info
 declare global {
@@ -34,10 +33,11 @@ class SearchController {
         return;
       }
 
-      const result = await searchGatewayService.performHybridSearch({
+      const result = await searchGatewayService.performSearch({
         userId,
         query: query.trim(),
         isAuthenticated,
+        type: "hybrid",
       });
 
       if (result.success) {
@@ -67,47 +67,16 @@ class SearchController {
   }
 
   /**
-   * GET /api/search/history/:userId
-   * Mendapatkan search history pengguna (hanya untuk authenticated users)
-   */
-  async getSearchHistory(req: Request, res: Response): Promise<void> {
-    try {
-      const { userId } = req.params;
-      const { limit = 20, offset = 0 } = req.query;
-
-      // Check authorization
-      if (req.user?.id !== userId) {
-        res.status(403).json({
-          success: false,
-          message: "Unauthorized to view this user's history",
-        });
-        return;
-      }
-
-      const result = await searchGatewayService.getUserSearchHistory(
-        userId,
-        Number(limit),
-        Number(offset)
-      );
-
-      res.status(200).json(result);
-    } catch (error) {
-      console.error("Error fetching search history:", error);
-      res.status(500).json({
-        success: false,
-        message: "Failed to fetch search history",
-        error: error instanceof Error ? error.message : "Unknown error",
-      });
-    }
-  }
-
-  /**
    * POST /api/predict/jaccard
    * Endpoint untuk Jaccard similarity search
+   * Jika user authenticated: simpan ke history sebagai type "jaccard"
+   * Jika user guest: jangan simpan
    */
   async performJaccardSearch(req: Request, res: Response): Promise<void> {
     try {
       const { query } = req.body;
+      const userId = req.user?.id;
+      const isAuthenticated = !!req.user;
 
       // Validasi query
       if (!query || typeof query !== "string" || query.trim().length === 0) {
@@ -118,14 +87,18 @@ class SearchController {
         return;
       }
 
-      const result = await searchGatewayService.performJaccardSearch(
-        query.trim()
-      );
+      const result = await searchGatewayService.performSearch({
+        userId,
+        query: query.trim(),
+        isAuthenticated,
+        type: "jaccard",
+      });
 
       if (result.success) {
         res.status(200).json({
           success: true,
           data: result.data,
+          historyId: result.historyId,
           message: result.message,
         });
       } else {
@@ -148,10 +121,14 @@ class SearchController {
   /**
    * POST /api/predict
    * Endpoint untuk TF-IDF vector space model search
+   * Jika user authenticated: simpan ke history sebagai type "vector"
+   * Jika user guest: jangan simpan
    */
   async performVectorSpaceSearch(req: Request, res: Response): Promise<void> {
     try {
       const { query } = req.body;
+      const userId = req.user?.id;
+      const isAuthenticated = !!req.user;
 
       // Validasi query
       if (!query || typeof query !== "string" || query.trim().length === 0) {
@@ -162,14 +139,18 @@ class SearchController {
         return;
       }
 
-      const result = await searchGatewayService.performVectorSpaceSearch(
-        query.trim()
-      );
+      const result = await searchGatewayService.performSearch({
+        userId,
+        query: query.trim(),
+        isAuthenticated,
+        type: "vector",
+      });
 
       if (result.success) {
         res.status(200).json({
           success: true,
           data: result.data,
+          historyId: result.historyId,
           message: result.message,
         });
       } else {
