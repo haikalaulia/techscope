@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import searchGatewayService from "../services/SearchGatewayService";
 import { JwtPayload } from "../types/auth.types";
-import prisma from "@/config/database";
+import { Prisma } from "@prisma/client";
 
 // Extend Express Request untuk menyimpan user info
 declare global {

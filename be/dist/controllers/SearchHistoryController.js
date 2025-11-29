@@ -1,7 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const client_1 = require("@prisma/client");
-const prisma = new client_1.PrismaClient();
+const prisma_1 = require("../lib/prisma");
 class SearchHistoryController {
     /**
      * Menyimpan riwayat pencarian untuk pengguna yang authenticated
@@ -17,7 +16,7 @@ class SearchHistoryController {
                 return;
             }
             // Verifikasi user ada di database
-            const user = await prisma.user.findUnique({
+            const user = await prisma_1.prisma.user.findUnique({
                 where: { id: userId },
             });
             if (!user) {
@@ -27,7 +26,7 @@ class SearchHistoryController {
                 });
                 return;
             }
-            const searchHistory = await prisma.searchHistory.create({
+            const searchHistory = await prisma_1.prisma.searchHistory.create({
                 data: {
                     userId,
                     query,
@@ -66,7 +65,7 @@ class SearchHistoryController {
                 return;
             }
             // Verifikasi user ada
-            const user = await prisma.user.findUnique({
+            const user = await prisma_1.prisma.user.findUnique({
                 where: { id: userId },
             });
             if (!user) {
@@ -78,13 +77,13 @@ class SearchHistoryController {
             }
             // Ambil search history dengan pagination
             const [searchHistories, totalCount] = await Promise.all([
-                prisma.searchHistory.findMany({
+                prisma_1.prisma.searchHistory.findMany({
                     where: { userId },
                     orderBy: { createdAt: "desc" },
                     take: Number(limit),
                     skip: Number(offset),
                 }),
-                prisma.searchHistory.count({
+                prisma_1.prisma.searchHistory.count({
                     where: { userId },
                 }),
             ]);
@@ -124,7 +123,7 @@ class SearchHistoryController {
                 return;
             }
             // Cek apakah history milik user
-            const history = await prisma.searchHistory.findUnique({
+            const history = await prisma_1.prisma.searchHistory.findUnique({
                 where: { id: historyId },
             });
             if (!history) {
@@ -141,7 +140,7 @@ class SearchHistoryController {
                 });
                 return;
             }
-            await prisma.searchHistory.delete({
+            await prisma_1.prisma.searchHistory.delete({
                 where: { id: historyId },
             });
             res.status(200).json({
@@ -172,7 +171,7 @@ class SearchHistoryController {
                 return;
             }
             // Verifikasi user ada
-            const user = await prisma.user.findUnique({
+            const user = await prisma_1.prisma.user.findUnique({
                 where: { id: userId },
             });
             if (!user) {
@@ -182,7 +181,7 @@ class SearchHistoryController {
                 });
                 return;
             }
-            const result = await prisma.searchHistory.deleteMany({
+            const result = await prisma_1.prisma.searchHistory.deleteMany({
                 where: { userId },
             });
             res.status(200).json({

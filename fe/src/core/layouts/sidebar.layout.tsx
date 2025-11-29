@@ -1,11 +1,11 @@
 'use client';
 
+import { SidebarInset,SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar';
 import { AppSidebar } from '@/core/components/app-sidebar';
-import { SidebarProvider, SidebarTrigger, SidebarInset } from '@/components/ui/sidebar';
 
-import ThemeToggle from '../components/theme-toggle';
 import LanguageDropdown from '../components/language.dropdown';
 import NotificationDropdown from '../components/notification.dropdown';
+import ThemeToggle from '../components/theme-toggle';
 // import UserDropdown from '../components/user.dropdown';
 
 // import AppBar from "../components/app-bar";

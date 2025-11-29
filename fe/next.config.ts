@@ -1,16 +1,29 @@
-import { env } from '@/configs/env.config';
-import type { NextConfig } from 'next';
+import { env } from "@/configs/env.config";
+import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   i18n: {
-    defaultLocale: 'en',
-    locales: ['en', 'id'],
+    defaultLocale: "en",
+    locales: ["en", "id"],
+  },
+
+  images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "**",
+      },
+      {
+        protocol: "http",
+        hostname: "**",
+      },
+    ],
   },
   redirects: async () => {
     return [
       {
-        source: '/',
-        destination: env.NEXT_PUBLIC_BASEPATH || '/home',
+        source: "/",
+        destination: env.NEXT_PUBLIC_BASEPATH || "/home",
         permanent: true,
       },
     ];

@@ -1,4 +1,5 @@
-type ToastType = 'success' | 'error' | 'warning' | 'info' | 'question';
+import { JSX } from "react";
+type ToastType = "success" | "error" | "warning" | "info" | "question";
 export interface ModalProps {
   title: string;
   icon: ToastType;
@@ -14,6 +15,13 @@ export interface ToastProps {
   icon?: ToastType;
   message: string;
   onVoid?: () => void;
+}
+
+export interface DivProps {
+  children?: React.ReactNode;
+  className?: string;
+  as?: keyof JSX.IntrinsicElements;
+  onSubmit?: (e: any) => void;
 }
 
 export interface AlertContexType {

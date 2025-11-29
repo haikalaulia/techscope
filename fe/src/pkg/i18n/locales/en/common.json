@@ -1,6 +1,79 @@
 {
-    "welcome": "Welcome",
-    "language": "Language",
-    "change_language": "Change Language",
-    "select_language": "Select Language"
+  "welcome": "Welcome",
+  "language": "Language",
+  "change_language": "Change Language",
+  "select_language": "Select Language",
+  "public": {
+    "headerTitle": "Trusted by 100,000+ users worldwide",
+    "title": "Your Money,",
+    "subtitle": "Beautifully Managed",
+    "deskripsi": "Take control of your finances with Velora. Smart budgeting, powerful analytics, and personalized insights all in one beautiful app.",
+    "start": "Start",
+    "watch": "Watch Demo",
+    "active users": "Active Users",
+    "money managed": "Money Managed",
+    "user rating": "User Rating"
+  },
+  "navbar-header": {
+    "title": "Beautifully Manage Your Money",
+    "login": "Login"
+  },
+  "fotter": {
+    "title": "Beautifully Manage Your Money",
+    "Follow us": "Follow us",
+    "fotterTitle": "All rights reserved."
+  },
+  "auth": {
+    "login": {
+      "title": "Welcome back",
+      "deskripsi": "Login with your Google account",
+      "google": "login with Google",
+      "spread": "Or continue with",
+      "forgot": "Forgot your password?",
+      "login": "SignIn",
+      "password": "Password",
+      "notAccount": "Don't have an account?",
+      "account": "Sign up",
+      "fotterDeskripsi": "By clicking continue, you agree to our",
+      "terms": "Terms of Service",
+      "and": "and",
+      "privacy": "Privacy Policy"
+    },
+    "register": {
+      "title": "Register",
+      "deskripsi": "Register with your Apple or Google account",
+      "google": "login with Google",
+      "spread": "Or continue with",
+      "name": "Name",
+      "password": "Password",
+      "register": "Register",
+      "notAccount": "Already have an account?",
+      "sign": "Sign In",
+      "fotterDeskripsi": "By clicking continue, you agree to our",
+      "terms": "Terms of Service",
+      "and": "and",
+      "privacy": "Privacy Policy"
+    }
+  },
+  "sidebar-konten": {
+    "dashboard": "Dashboard",
+    "transaction": "Transaction",
+    "budget": "Budget",
+    "goal": "Goal",
+    "report": "Report",
+    "setting": "Setting",
+    "category": "Category"
+  },
+  "dashboard": {
+    "title": "Financial Dashboard",
+    "desc": "Overview of your financial activities"
+  },
+  "category": {
+    "title": "Category",
+    "desc": "Organize your spending with categories"
+  },
+  "transaction": {
+    "title": "All Transactions",
+    "desc": "Track and manage your financial transactions"
+  }
 }

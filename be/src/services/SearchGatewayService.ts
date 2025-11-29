@@ -1,7 +1,5 @@
 import axios, { AxiosInstance } from "axios";
-import { PrismaClient } from "@prisma/client";
-
-const prisma = new PrismaClient();
+import { prisma } from "../lib/prisma";
 
 interface FlaskSearchResult {
   query: string;

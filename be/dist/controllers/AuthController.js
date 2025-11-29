@@ -5,9 +5,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
-const client_1 = require("@prisma/client");
+const prisma_1 = require("../lib/prisma");
 const otp_handler_1 = require("../utils/otp-handler");
-const prisma = new client_1.PrismaClient();
 const mailer_1 = require("../utils/mailer");
 const uploadsClodinary_1 = require("../utils/uploadsClodinary");
 class AuthController {
@@ -19,7 +18,7 @@ class AuthController {
                     res.status(400).json({ message: "All fields are required" });
                     return;
                 }
-                const isAlreadyRegistered = await prisma.user.findUnique({
+                const isAlreadyRegistered = await prisma_1.prisma.user.findUnique({
                     where: { email: auth.email },
                 });
                 if (isAlreadyRegistered) {
@@ -29,7 +28,7 @@ class AuthController {
                 const hashedPassword = await bcryptjs_1.default.hash(auth.password, 10);
                 const otp = (0, otp_handler_1.generateOtp)(6);
                 const otpExpiress = new Date(Date.now() + 5 * 60 * 1000);
-                const newUser = await prisma.user.create({
+                const newUser = await prisma_1.prisma.user.create({
                     data: {
                         email: auth.email,
                         fullName: auth.fullName,
@@ -67,7 +66,7 @@ class AuthController {
                     });
                     return;
                 }
-                const user = await prisma.user.findUnique({
+                const user = await prisma_1.prisma.user.findUnique({
                     where: { email: auth.email },
                 });
                 if (!user) {
@@ -96,7 +95,7 @@ class AuthController {
                 const token = jsonwebtoken_1.default.sign(payload, process.env.JWT_SECRET, {
                     expiresIn: "1d",
                 });
-                await prisma.user.update({ where: { id: user.id }, data: { token } });
+                await prisma_1.prisma.user.update({ where: { id: user.id }, data: { token } });
                 res.status(200).json({
                     status: 200,
                     data: { ...user, token },
@@ -119,14 +118,14 @@ class AuthController {
                     res.status(401).json({ status: 401, message: "Unauthorized" });
                     return;
                 }
-                const user = await prisma.user.findUnique({
+                const user = await prisma_1.prisma.user.findUnique({
                     where: { id: auth.id },
                 });
                 if (!user) {
                     res.status(404).json({ status: 404, message: "Account not found" });
                     return;
                 }
-                await prisma.user.update({
+                await prisma_1.prisma.user.update({
                     where: { id: auth.id },
                     data: { token: null },
                 });
@@ -154,7 +153,7 @@ class AuthController {
                     });
                     return;
                 }
-                const user = await prisma.user.findFirst({
+                const user = await prisma_1.prisma.user.findFirst({
                     where: { email: auth.email },
                 });
                 if (!user) {
@@ -167,7 +166,7 @@ class AuthController {
                 const otp = (0, otp_handler_1.generateOtp)(6);
                 const otpExpiress = new Date(Date.now() + 5 * 60 * 1000);
                 await (0, mailer_1.sendOTPEmail)(auth.email, otp);
-                const newOtp = await prisma.user.update({
+                const newOtp = await prisma_1.prisma.user.update({
                     where: {
                         email: auth.email,
                     },
@@ -201,7 +200,7 @@ class AuthController {
                     });
                     return;
                 }
-                const user = await prisma.user.findFirst({
+                const user = await prisma_1.prisma.user.findFirst({
                     where: {
                         email: auth.email,
                         otp: auth.otp,
@@ -215,7 +214,7 @@ class AuthController {
                     return;
                 }
                 // TODO: Tambahkan cek expOtp di sini
-                const updateUser = await prisma.user.update({
+                const updateUser = await prisma_1.prisma.user.update({
                     where: { id: user.id },
                     data: { isVerify: true, otp: null },
                 });
@@ -245,7 +244,7 @@ class AuthController {
                     return;
                 }
                 // findFirstOrThrow diganti findFirst lalu cek manual
-                const user = await prisma.user.findFirst({
+                const user = await prisma_1.prisma.user.findFirst({
                     where: {
                         email: auth.email,
                     },
@@ -259,7 +258,7 @@ class AuthController {
                 }
                 const otp = (0, otp_handler_1.generateOtp)(6);
                 const otpExpires = new Date(Date.now() + 5 * 60 * 1000);
-                const newOtp = await prisma.user.update({
+                const newOtp = await prisma_1.prisma.user.update({
                     where: { id: user.id },
                     data: { otp: otp, expOtp: otpExpires },
                 });
@@ -289,7 +288,7 @@ class AuthController {
                     });
                     return;
                 }
-                const auth = await prisma.user.findFirst({
+                const auth = await prisma_1.prisma.user.findFirst({
                     where: {
                         id: user.id,
                     },
@@ -354,7 +353,7 @@ class AuthController {
                 if (documentUrl.photoUrl) {
                     updateData.photoUrl = documentUrl.photoUrl;
                 }
-                const Auth = await prisma.user.update({
+                const Auth = await prisma_1.prisma.user.update({
                     where: {
                         id: jwtUser.id,
                     },
@@ -386,7 +385,7 @@ class AuthController {
                 });
                 return;
             }
-            const user = await prisma.user.findFirst({
+            const user = await prisma_1.prisma.user.findFirst({
                 where: {
                     email: auth.email,
                 },
@@ -406,7 +405,7 @@ class AuthController {
                 return;
             }
             const hashedPassword = await bcryptjs_1.default.hash(auth.password, 10);
-            const newPassword = await prisma.user.update({
+            const newPassword = await prisma_1.prisma.user.update({
                 where: { id: user.id },
                 data: { password: hashedPassword },
             });

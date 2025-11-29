@@ -1,7 +1,8 @@
-import { cn } from '@/utils/classname';
-import React, { forwardRef, useState } from 'react';
 import { Icon } from '@iconify/react';
 import Link from 'next/link';
+import React, { forwardRef, useState } from 'react';
+
+import { cn } from '@/utils/classname';
 
 type InputBaseProps = {
   placeholder?: string;

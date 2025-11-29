@@ -1,6 +1,7 @@
 "use client";
 
 import classnames from "classnames";
+
 import { blankLayoutClasses } from "./classes.layout";
 
 type Props = {

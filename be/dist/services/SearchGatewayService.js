@@ -4,8 +4,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const axios_1 = __importDefault(require("axios"));
-const client_1 = require("@prisma/client");
-const prisma = new client_1.PrismaClient();
+const prisma_1 = require("../lib/prisma");
 class SearchGatewayService {
     constructor() {
         this.flaskClient = axios_1.default.create({
@@ -81,7 +80,7 @@ class SearchGatewayService {
             // 2. Jika user authenticated, simpan ke search history
             let historyId;
             if (request.isAuthenticated && request.userId) {
-                const history = await prisma.searchHistory.create({
+                const history = await prisma_1.prisma.searchHistory.create({
                     data: {
                         userId: request.userId,
                         query: request.query,
@@ -120,7 +119,7 @@ class SearchGatewayService {
      */
     async saveSearchHistoryAsync(userId, query, processedQuery, resultsJson) {
         try {
-            const history = await prisma.searchHistory.create({
+            const history = await prisma_1.prisma.searchHistory.create({
                 data: {
                     userId,
                     query,
@@ -138,13 +137,13 @@ class SearchGatewayService {
     async getUserSearchHistory(userId, limit = 20, offset = 0) {
         try {
             const [histories, total] = await Promise.all([
-                prisma.searchHistory.findMany({
+                prisma_1.prisma.searchHistory.findMany({
                     where: { userId },
                     orderBy: { createdAt: "desc" },
                     take: limit,
                     skip: offset,
                 }),
-                prisma.searchHistory.count({ where: { userId } }),
+                prisma_1.prisma.searchHistory.count({ where: { userId } }),
             ]);
             return {
                 success: true,

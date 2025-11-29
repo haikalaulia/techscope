@@ -1,5 +1,6 @@
-import { metadata, siteConfig } from './metadata';
 import '@/styles/globals.css';
+
+import { metadata, siteConfig } from './metadata';
 import { AppProviders } from './providers';
 
 export { metadata };

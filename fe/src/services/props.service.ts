@@ -1,6 +1,8 @@
-import AuhtApi from '@/services/auth/auth.service';
+import AuhtApi from "@/services/auth/auth.service";
+import SearchApi from "./searching/searching.service";
 class Api {
-  static Auht = AuhtApi;
+  static Auth = new AuhtApi();
+  static Search = new SearchApi();
 }
 
 export default Api;

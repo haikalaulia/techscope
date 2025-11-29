@@ -1,6 +1,79 @@
 {
-    "welcome": "Selamat Datang",
-    "language": "Bahasa",
-    "change_language": "Ganti Bahasa",
-    "select_language": "Pilih Bahasa"
+  "welcome": "Selamat Datang",
+  "language": "Bahasa",
+  "change_language": "Ganti Bahasa",
+  "select_language": "Pilih Bahasa",
+  "public": {
+    "headerTitle": "Dipercaya oleh lebih dari 100.000 pengguna di seluruh dunia",
+    "title": "Uang Anda,",
+    "subtitle": " Dikelola dengan Baik",
+    "deskripsi": "Ambil kendali atas keuangan Anda dengan Velora. Pengelolaan anggaran cerdas, analisis yang kuat, dan wawasan yang disesuaikan, semuanya dalam satu aplikasi yang indah.",
+    "start": "Start",
+    "watch": "Nonton Demo",
+    "active users": "Pengguna Aktif",
+    "money managed": "Dana yang Dikelola",
+    "user rating": "Peringkat Pengguna"
+  },
+  "navbar-header": {
+    "title": "Kelola Uang Anda dengan Baik",
+    "login": "Masuk"
+  },
+  "fotter": {
+    "title": "Kelola Uang Anda dengan Baik",
+    "Follow us": "Ikuti Juga",
+    "fotterTitle": "Semua hak dilindungi."
+  },
+  "auth": {
+    "login": {
+      "title": "Selamat datang kembali",
+      "deskripsi": "Masuk dengan akun Google Anda",
+      "google": "Masuk dengan Google",
+      "spread": "Atau lanjutkan dengan",
+      "forgot": "Lupa kata sandi Anda?",
+      "login": "Masuk",
+      "password": "Kata sandi",
+      "notAccount": "Belum punya akun?",
+      "account": "Daftar",
+      "fotterDeskripsi": "Dengan mengklik “Lanjutkan”, Anda setuju dengan ketentuan kami.",
+      "terms": "Syarat dan Ketentuan",
+      "and": "dan",
+      "privacy": "Kebijakan Privasi"
+    },
+    "register": {
+      "title": "Daftar",
+      "deskripsi": "Daftar menggunakan akun Apple atau Google Anda",
+      "google": "Masuk dengan Google",
+      "spread": "Atau lanjutkan dengan",
+      "name": "Nama",
+      "password": "Kata sandi",
+      "register": "Daftar",
+      "notAccount": "sudah memiliki akun",
+      "sign": "Masuk",
+      "fotterDeskripsi": "Dengan mengklik “Lanjutkan”, Anda setuju dengan ketentuan kami.",
+      "terms": "Syarat dan Ketentuan",
+      "and": "dan",
+      "privacy": "Kebijakan Privasi"
+    }
+  },
+  "sidebar-konten": {
+    "dashboard": "Dasbor",
+    "transaction": "Transaksi",
+    "budget": "Anggaran",
+    "goal": "Tujuan",
+    "report": "Laporan",
+    "setting": "Pengaturan",
+    "category": "Kategori"
+  },
+  "dashboard": {
+    "title": "Dashboard Keuangan",
+    "desc": "Ringkasan aktivitas keuangan Anda"
+  },
+  "category": {
+    "title": "Kategori",
+    "desc": "Atur pengeluaran Anda dengan kategori"
+  },
+  "transaction": {
+    "title": "Semua Transaksi",
+    "desc": "Lacak dan kelola transaksi keuangan Anda"
+  }
 }

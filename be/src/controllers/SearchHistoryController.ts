@@ -1,11 +1,9 @@
 import { Request, Response } from "express";
-import { PrismaClient } from "@prisma/client";
+import { prisma } from "../lib/prisma";
 import {
   CreateSearchHistory,
   SearchHistoryResponse,
 } from "../types/searchHistory.types";
-
-const prisma = new PrismaClient();
 
 class SearchHistoryController {
   /**

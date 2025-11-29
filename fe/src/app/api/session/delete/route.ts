@@ -1,8 +1,8 @@
 'use server';
 
+import { cookies } from 'next/headers';
 import { NextResponse } from 'next/server';
 
-import { cookies } from 'next/headers';
 import { APP_SESSION_COOKIE_KEY } from '@/configs/cookies.config';
 
 export async function POST() {

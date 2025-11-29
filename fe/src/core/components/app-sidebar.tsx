@@ -1,9 +1,9 @@
 'use client';
 
 import { Calendar, Home, Inbox, Search, Settings } from 'lucide-react';
+import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { cn } from '@/utils/classname';
 
 import {
   Sidebar,
@@ -11,13 +11,13 @@ import {
   SidebarGroup,
   SidebarGroupContent,
   SidebarGroupLabel,
+  SidebarHeader,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-  SidebarHeader,
   useSidebar,
 } from '@/components/ui/sidebar';
-import Image from 'next/image';
+import { cn } from '@/utils/classname';
 import { kebabCaseToWords } from '@/utils/string.format';
 
 // Menu items with proper routes

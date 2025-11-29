@@ -39,7 +39,6 @@ model SearchHistory {
   // Relations
   user            User            @relation(fields: [userId], references: [id], onDelete: Cascade)
   
-  // Indexes untuk performa query
   @@index([userId])
   @@index([createdAt])
   @@map("SearchHistory")

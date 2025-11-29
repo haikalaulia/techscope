@@ -1,15 +1,18 @@
-import { configureStore } from '@reduxjs/toolkit';
-import { combineReducers } from '@reduxjs/toolkit';
-import storage from 'redux-persist/lib/storage';
-import { persistReducer, persistStore } from 'redux-persist';
-import authReducer from '../authSlice/authSlice';
+import { configureStore } from "@reduxjs/toolkit";
+import { combineReducers } from "@reduxjs/toolkit";
+import { persistReducer, persistStore } from "redux-persist";
+import storage from "redux-persist/lib/storage";
+
+import authReducer from "../authSlice/authSlice";
+import otpReducer from "../otpSlice/otpSlice";
 
 const rootReduser = combineReducers({
   auth: authReducer,
+  otp: otpReducer,
 });
 
 const persistConfig = {
-  key: 'root',
+  key: "root",
   storage,
 };
 

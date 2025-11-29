@@ -12,10 +12,8 @@ import {
   PickResetPassword,
   PickUpdateProfile,
 } from "../types/auth.types";
-import { PrismaClient } from "@prisma/client";
+import { prisma } from "../lib/prisma";
 import { generateOtp } from "../utils/otp-handler";
-
-const prisma = new PrismaClient();
 import { sendOTPEmail } from "../utils/mailer";
 import { uploadCloudinary } from "../utils/uploadsClodinary";
 
