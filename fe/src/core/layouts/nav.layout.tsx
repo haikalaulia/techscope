@@ -6,7 +6,6 @@ export default function NavLayout({ children }: { children: React.ReactNode }) {
     <main className="flex flex-col min-h-screen w-full">
       <AppHeader />
       <div className="flex-1 w-full ">{children}</div>
-      {/* <AppFooter /> */}
     </main>
   );
 }

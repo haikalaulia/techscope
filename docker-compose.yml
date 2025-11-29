@@ -1,0 +1,33 @@
+version: "3.9"
+
+services:
+  fe:
+    build:
+      context: ./fe
+      dockerfile: Dockerfile
+    container_name: techscope_fe
+    ports:
+      - "3000:3000"
+    depends_on:
+      - be-node
+      - be-flask
+
+  be-node:
+    build:
+      context: ./be
+      dockerfile: Dockerfile
+    container_name: techscope_express
+    ports:
+      - "5000:5000"
+    env_file:
+      - ./be/.env
+    volumes:
+      - ./be:/app
+
+  be-flask:
+    build:
+      context: ./api
+      dockerfile: Dockerfile
+    container_name: techscope_flask
+    ports:
+      - "5001:5001"

@@ -20,6 +20,10 @@ class SearchApi {
     const res = await AxiosClient.post("/api/search/evaluate", payload);
     return res.data;
   }
+  async getDetailById(id: string): Promise<TResponse<any>> {
+    const res = await AxiosClient.get(`/api/search/detail/${id}`);
+    return res.data;
+  }
 }
 
 export default SearchApi;

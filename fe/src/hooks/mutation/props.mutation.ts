@@ -5,6 +5,7 @@ import { useAuthData } from "./auth/query";
 import HistoryMutation from "./history/mutation";
 import { useHistoryData } from "./history/query";
 import useSearchingMutation from "./searching/mutation";
+import { useSearchData } from "./searching/query";
 
 export const useServices = () => ({
   Auth: {
@@ -13,6 +14,7 @@ export const useServices = () => ({
   },
   Search: {
     mutation: useSearchingMutation,
+    query: useSearchData,
   },
   History: {
     mutation: HistoryMutation,

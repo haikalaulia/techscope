@@ -304,6 +304,47 @@ class SearchGatewayService {
   }
 
   /**
+   * Get detail produk dari Flask berdasarkan ID
+   * @param id ID produk (string / number)
+   */
+  async getDetailById(id: string) {
+    try {
+      const response = await this.flaskClient.get(`/detail/${id}`);
+
+      let result = response.data;
+
+      if (typeof result === "string") {
+        result = this.safeJSONParse(result);
+      }
+
+      // Clean NaN values
+      const cleaned = this.cleanNaNValues(result);
+
+      return {
+        success: true,
+        data: cleaned.data,
+        message: "Detail fetched successfully",
+      };
+    } catch (error: any) {
+      console.error("Detail Fetch Error:", error);
+
+      if (axios.isAxiosError(error)) {
+        return {
+          success: false,
+          message: "Error connecting to Flask detail service",
+          error: error.message,
+        };
+      }
+
+      return {
+        success: false,
+        message: "Unexpected error",
+        error: error instanceof Error ? error.message : "Unknown error",
+      };
+    }
+  }
+
+  /**
    * Predict Vector Space - Endpoint untuk TF-IDF vector space model
    * @param query Query string dari user
    * @returns Hasil search menggunakan TF-IDF

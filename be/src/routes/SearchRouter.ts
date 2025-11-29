@@ -89,6 +89,10 @@ class SearchRouter {
       "/evaluate",
       searchController.performModelEvaluation.bind(searchController)
     );
+    this.router.get(
+      "/detail/:id",
+      searchController.getDetailById.bind(searchController)
+    );
   }
 }
 

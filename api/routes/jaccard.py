@@ -6,7 +6,6 @@ from utils.preprocessing import jaccard_similarity, process_query_hybrid
 
 
 @app.route("/predict_jaccard", methods=["POST"])
-@app.route("/predict_jaccard", methods=["POST"])
 def predict_jaccard():
     try:
         data = request.get_json()

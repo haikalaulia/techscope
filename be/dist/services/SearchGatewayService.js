@@ -12,10 +12,6 @@ class SearchGatewayService {
             timeout: 30000,
         });
     }
-    /**
-     * Helper: Clean NaN values dari response Flask
-     * NaN dari pandas DataFrame tidak valid dalam JSON
-     */
     cleanNaNValues(obj) {
         if (obj === null || obj === undefined) {
             return null;
@@ -246,6 +242,41 @@ class SearchGatewayService {
         }
     }
     /**
+     * Get detail produk dari Flask berdasarkan ID
+     * @param id ID produk (string / number)
+     */
+    async getDetailById(id) {
+        try {
+            const response = await this.flaskClient.get(`/detail/${id}`);
+            let result = response.data;
+            if (typeof result === "string") {
+                result = this.safeJSONParse(result);
+            }
+            // Clean NaN values
+            const cleaned = this.cleanNaNValues(result);
+            return {
+                success: true,
+                data: cleaned.data,
+                message: "Detail fetched successfully",
+            };
+        }
+        catch (error) {
+            console.error("Detail Fetch Error:", error);
+            if (axios_1.default.isAxiosError(error)) {
+                return {
+                    success: false,
+                    message: "Error connecting to Flask detail service",
+                    error: error.message,
+                };
+            }
+            return {
+                success: false,
+                message: "Unexpected error",
+                error: error instanceof Error ? error.message : "Unknown error",
+            };
+        }
+    }
+    /**
      * Predict Vector Space - Endpoint untuk TF-IDF vector space model
      * @param query Query string dari user
      * @returns Hasil search menggunakan TF-IDF
@@ -257,44 +288,6 @@ class SearchGatewayService {
             isAuthenticated: false,
             type: "vector",
         });
-    }
-    /**
-     * Get product detail from Flask API
-     * @param productId Product ID
-     * @returns Full product detail
-     */
-    async getProductDetail(productId) {
-        try {
-            const flaskResponse = await this.flaskClient.get(`/product/${productId}`);
-            if (flaskResponse.data.success) {
-                return {
-                    success: true,
-                    data: flaskResponse.data.data,
-                };
-            }
-            else {
-                return {
-                    success: false,
-                    message: flaskResponse.data.message,
-                    error: "Product not found",
-                };
-            }
-        }
-        catch (error) {
-            console.error("Error fetching product detail:", error);
-            if (axios_1.default.isAxiosError(error)) {
-                return {
-                    success: false,
-                    message: "Error connecting to product service",
-                    error: error.message,
-                };
-            }
-            return {
-                success: false,
-                message: "An unexpected error occurred",
-                error: error instanceof Error ? error.message : "Unknown error",
-            };
-        }
     }
 }
 exports.default = new SearchGatewayService();

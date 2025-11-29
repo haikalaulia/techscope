@@ -75,15 +75,7 @@ class SearchRouter {
          * Returns: { success, data: { precision, recall, f1 }, message }
          */
         this.router.post("/evaluate", SearchController_1.default.performModelEvaluation.bind(SearchController_1.default));
-        /**
-         * GET /api/products/:id
-         * Mendapatkan detail lengkap produk berdasarkan ID
-         * Accessible untuk semua user (authenticated & unauthenticated)
-         *
-         * Params: id (product ID)
-         * Returns: { success, data: { id, title, image, content, specs, price, info } }
-         */
-        this.router.get("/products/:id", SearchController_1.default.getProductDetail.bind(SearchController_1.default));
+        this.router.get("/detail/:id", SearchController_1.default.getDetailById.bind(SearchController_1.default));
     }
 }
 exports.default = new SearchRouter().router;

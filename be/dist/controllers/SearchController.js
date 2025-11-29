@@ -210,31 +210,26 @@ class SearchController {
             });
         }
     }
-    /**
-     * GET /api/products/:id
-     * Mendapatkan detail lengkap produk berdasarkan ID
-     * Accessible untuk semua user (authenticated & unauthenticated)
-     */
-    async getProductDetail(req, res) {
+    async getDetailById(req, res) {
         try {
             const { id } = req.params;
-            // Validasi ID
-            if (!id || isNaN(Number(id))) {
+            if (!id) {
                 res.status(400).json({
                     success: false,
-                    message: "Invalid product ID",
+                    message: "Product ID is required",
                 });
                 return;
             }
-            const result = await SearchGatewayService_1.default.getProductDetail(Number(id));
+            const result = await SearchGatewayService_1.default.getDetailById(id);
             if (result.success) {
                 res.status(200).json({
                     success: true,
                     data: result.data,
+                    message: result.message,
                 });
             }
             else {
-                res.status(404).json({
+                res.status(500).json({
                     success: false,
                     message: result.message,
                     error: result.error,
@@ -242,7 +237,7 @@ class SearchController {
             }
         }
         catch (error) {
-            console.error("Error fetching product detail:", error);
+            console.error("Get detail error:", error);
             res.status(500).json({
                 success: false,
                 message: "Internal server error",

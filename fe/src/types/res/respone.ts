@@ -20,6 +20,9 @@ export interface ResultRespone {
   tags?: string | null;
   tanggal_rilis?: string | null;
   title?: string | null;
+  final_similarity?: number | null;
+  tfidf_score?: number | null;
+  jaccard_score?: number | null;
 }
 
 export interface hybridsRespone {
@@ -27,23 +30,49 @@ export interface hybridsRespone {
   price_target: number | null;
   processed: string;
   query: string;
-  results: ResultRespone;
+  results: ResultRespone[];
 }
 
 export interface jaccardRespon {
   category_filter: string;
   price_target: number | null;
   processed: string;
-  processed_tokens: string[];
+  processed_tokens: string;
   query: string;
-  result: ResultRespone;
+  results: ResultRespone[];
 }
 
 export interface TFIDFRespon {
   category_filter: string;
   price_target: number | null;
   processed: string;
-  processed_tokens: string[];
+  processed_tokens: string;
   query: string;
-  result: ResultRespone;
+  results: ResultRespone[];
+}
+
+export type SearchRespone = hybridsRespone | jaccardRespon | TFIDFRespon;
+
+export interface ResponseProduct {
+  battery: string | null;
+  brand: string;
+  camera: string;
+  combined_text_final: string;
+  content: string;
+  device_type: string;
+  display: string;
+  harga: string;
+  harga_num: number;
+  id: number;
+  image: string;
+  model: string;
+  os: string;
+  penulis: string | null;
+  processor: string;
+  ram: string;
+  source_url: string;
+  storage: string;
+  tags: string;
+  tanggal_rilis: string | null;
+  title: string;
 }

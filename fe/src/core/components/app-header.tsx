@@ -44,7 +44,7 @@ export default function AppHeader() {
       )}
     >
       <div className="flex items-center justify-between max-w-7xl mx-auto">
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-1">
           <Link href="/">
             <Image
               src="/favicon/Frame 2.png"
@@ -53,6 +53,7 @@ export default function AppHeader() {
               height={80}
             />
           </Link>
+          <h1 className="text-3xl font-medium">Tecsope</h1>
         </div>
 
         <div className="flex items-center gap-4">

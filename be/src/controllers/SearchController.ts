@@ -229,6 +229,42 @@ class SearchController {
       });
     }
   }
+  async getDetailById(req: Request, res: Response): Promise<void> {
+    try {
+      const { id } = req.params;
+
+      if (!id) {
+        res.status(400).json({
+          success: false,
+          message: "Product ID is required",
+        });
+        return;
+      }
+
+      const result = await searchGatewayService.getDetailById(id);
+
+      if (result.success) {
+        res.status(200).json({
+          success: true,
+          data: result.data,
+          message: result.message,
+        });
+      } else {
+        res.status(500).json({
+          success: false,
+          message: result.message,
+          error: result.error,
+        });
+      }
+    } catch (error) {
+      console.error("Get detail error:", error);
+      res.status(500).json({
+        success: false,
+        message: "Internal server error",
+        error: error instanceof Error ? error.message : "Unknown error",
+      });
+    }
+  }
 }
 
 export default new SearchController();

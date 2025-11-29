@@ -37,7 +37,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     const isAuthenticated = Boolean(currentUser?.user?.token);
 
     if (!isAuthenticated && !isAuthPage) {
-      router.replace("/login");
+      router.replace("/home");
       return;
     }
 

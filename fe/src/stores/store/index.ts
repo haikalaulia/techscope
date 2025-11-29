@@ -5,10 +5,12 @@ import storage from "redux-persist/lib/storage";
 
 import authReducer from "../authSlice/authSlice";
 import otpReducer from "../otpSlice/otpSlice";
+import resReducer from "../resSlice/resSlice";
 
 const rootReduser = combineReducers({
   auth: authReducer,
   otp: otpReducer,
+  res: resReducer,
 });
 
 const persistConfig = {
